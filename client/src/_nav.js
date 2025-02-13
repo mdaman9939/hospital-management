@@ -66,11 +66,6 @@ const _nav = [
         name: 'Duty Rosters and Schedules',
         to: '/buttons/dutyrostersschedules',
       },
-      {
-        component: CNavItem,
-        name: 'Appointment and Consultation Tracking',
-        to: '/buttons/appointmentconsultationtracking',
-      },
     ],
   },
   {

@@ -1,21 +1,45 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors')
-const connectDb = require('./config/db');
-const PatientRegistrationAdmissionRoutes = require('./routes/PatientRegistrationAdmission')
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+require("dotenv").config(); // Load environment variables
+const connectDb = require("./config/db");
+const PatientRegistrationAdmissionRoutes = require("./routes/PatientRegistrationAdmission");
+const AppointmentSchedulingRoutes = require("./routes/AppointmentScheduling");
+const DischargesummarymanagementRoutes = require("./routes/DischargeSummaryManagement");
+const DoctorProfilesSpecializationsRoutes = require("./routes/DoctorProfilesSpecializations");
+const DutyRostersSchedulesRoutes = require("./routes/DutyRostersSchedules");
+const EmployeeRecordsRoutes = require("./routes/EmployeeRecords ");
+const ShiftManagementRoutes = require("./routes/ShiftManagement");
+const PayrollLeaveManagementRoutes = require("./routes/PayrollLeaveManagement");
+const RegisterRoutes = require("./routes/Register");
+const authenticateToken = require("./routes/AuthenticateToken");
 const app = express();
 
 connectDb();
+// Middleware to parse JSON bodies
+app.use(express.json()); // Required if your API handles JSON
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api", PatientRegistrationAdmissionRoutes);
+app.use("/api", AppointmentSchedulingRoutes);
+app.use("/api", DischargesummarymanagementRoutes);
+app.use("/api", DoctorProfilesSpecializationsRoutes);
+app.use("/api", DutyRostersSchedulesRoutes);
+app.use("/api", EmployeeRecordsRoutes);
+app.use("/api", ShiftManagementRoutes);
+app.use("/api", PayrollLeaveManagementRoutes);
+app.use("/api", RegisterRoutes);
 
-app.get('/',(req,res)=>{
-    res.send('hello, world!')
-})
+app.get("/dashboard", authenticateToken, (req, res) => {
+  res.json({ message: "Welcome to the dashboard!" });
+});
 
-const port = 1000;
+app.get("/", (req, res) => {
+  res.send("hello, world!");
+});
 
-app.listen(port, ()=>{
-    console.log(`server is running on a port ${port}`)
-})
+const PORT = process.env.PORT || 1000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

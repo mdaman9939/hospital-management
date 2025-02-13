@@ -11,6 +11,7 @@ const PatientRegistrationAdmissionSchema = new mongoose.Schema({
   ward: { type: String, required: true },
   guardianContact: { type: String, required: true }, // Changed to String to handle phone numbers properly
   medicalHistory: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Add this line to store userId
 });
 
 // Create the model from the schema

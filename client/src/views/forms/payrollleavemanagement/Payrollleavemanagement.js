@@ -10,10 +10,28 @@ import {
   CFormSelect,
   CFormTextarea,
   CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const PayrollLeaveManagement = () => {
+  const navigate = useNavigate()
+
+  // Authentication Check: Redirect to login if no token found
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/login')
+    }
+  }, [navigate])
+
   const [payrollDetails, setPayrollDetails] = useState({
     employeeId: '',
     employeeName: '',
@@ -27,12 +45,37 @@ const PayrollLeaveManagement = () => {
     leaveReason: '',
   })
 
+  const [payrollRecords, setPayrollRecords] = useState([])
+  const [employeeRecords, setEmployeeRecords] = useState([])
+
+  // Fetch payroll records from the backend
+  // Fetch payroll records from the backend
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    fetch('http://localhost:1000/api/payroll-leave', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setPayrollRecords(data) // Directly use the array data
+        } else {
+          setPayrollRecords([])
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching payroll records:', error)
+        setPayrollRecords([]) // Handle fetch errors
+      })
+  }, [])
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setPayrollDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setPayrollDetails((prev) => ({ ...prev, [name]: value }))
   }
 
   const calculateTotalSalary = () => {
@@ -40,12 +83,44 @@ const PayrollLeaveManagement = () => {
       parseFloat(payrollDetails.basicSalary || 0) +
       parseFloat(payrollDetails.allowances || 0) -
       parseFloat(payrollDetails.deductions || 0)
-    setPayrollDetails((prev) => ({ ...prev, totalSalary }))
+    setPayrollDetails((prev) => ({ ...prev, totalSalary: totalSalary.toFixed(2) }))
   }
 
-  const submitPayrollLeaveDetails = () => {
-    console.log('Payroll and Leave Details Submitted:', payrollDetails)
-    alert('Payroll and leave record saved successfully!')
+  const submitPayrollLeaveDetails = async () => {
+    const token = localStorage.getItem('token')
+
+    try {
+      const response = await fetch('http://localhost:1000/api/payroll-leave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payrollDetails),
+      })
+
+      if (response.ok) {
+        const newRecord = await response.json()
+        setPayrollRecords((prev) => [...prev, newRecord.data])
+        setPayrollDetails({
+          employeeId: '',
+          employeeName: '',
+          basicSalary: '',
+          allowances: '',
+          deductions: '',
+          totalSalary: '',
+          leaveType: '',
+          leaveStartDate: '',
+          leaveEndDate: '',
+          leaveReason: '',
+        })
+      } else {
+        alert('Error saving payroll and leave record')
+      }
+    } catch (error) {
+      console.error('Error submitting payroll leave details:', error)
+      alert('An error occurred while saving the record')
+    }
   }
 
   return (
@@ -57,7 +132,6 @@ const PayrollLeaveManagement = () => {
           </CCardHeader>
           <CCardBody>
             <CForm>
-              {/* Employee Information */}
               <CRow>
                 <CCol md={6}>
                   <CFormLabel htmlFor="employeeId">Employee ID</CFormLabel>
@@ -83,7 +157,6 @@ const PayrollLeaveManagement = () => {
                 </CCol>
               </CRow>
 
-              {/* Salary Information */}
               <CRow className="mt-3">
                 <CCol md={4}>
                   <CFormLabel htmlFor="basicSalary">Basic Salary</CFormLabel>
@@ -137,7 +210,6 @@ const PayrollLeaveManagement = () => {
                 </CCol>
               </CRow>
 
-              {/* Leave Information */}
               <CRow className="mt-3">
                 <CCol md={4}>
                   <CFormLabel htmlFor="leaveType">Leave Type</CFormLabel>
@@ -198,6 +270,34 @@ const PayrollLeaveManagement = () => {
                 </CCol>
               </CRow>
             </CForm>
+
+            {/* Data Table to Display Records */}
+            <CTable hover striped className="mt-4">
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell>Employee ID</CTableHeaderCell>
+                  <CTableHeaderCell>Employee Name</CTableHeaderCell>
+                  <CTableHeaderCell>Total Salary</CTableHeaderCell>
+                  <CTableHeaderCell>Leave Type</CTableHeaderCell>
+                  <CTableHeaderCell>Leave Dates</CTableHeaderCell>
+                  <CTableHeaderCell>Reason</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {payrollRecords.map((record, index) => (
+                  <CTableRow key={index}>
+                    <CTableDataCell>{record.employeeId}</CTableDataCell>
+                    <CTableDataCell>{record.employeeName}</CTableDataCell>
+                    <CTableDataCell>{record.totalSalary}</CTableDataCell>
+                    <CTableDataCell>{record.leaveType}</CTableDataCell>
+                    <CTableDataCell>
+                      {record.leaveStartDate} to {record.leaveEndDate}
+                    </CTableDataCell>
+                    <CTableDataCell>{record.leaveReason}</CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
           </CCardBody>
         </CCard>
       </CCol>

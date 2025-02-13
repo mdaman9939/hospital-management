@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 
-// mongoDb connection url
-const dbURL =
-  "mongodb+srv://mdaman9939:A123456@cluster0.5kgahgx.mongodb.net/hospital-management?retryWrites=true&w=majority&appName=Cluster0";
-
+// MongoDB connection URL from environment
+const dbURL = process.env.MONGO_DB_URL;
 // connect to mongoDB
 const connectDB = async () => {
   try {

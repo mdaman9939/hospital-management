@@ -10,9 +10,21 @@ import {
   CFormSelect,
   CRow,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const EmployeeRecords = () => {
+  const navigate = useNavigate()
+
+  // Authentication Check: Redirect to login if no token found
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/login')
+    }
+  }, [navigate])
+
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     employeeId: '',
@@ -22,15 +34,74 @@ const EmployeeRecords = () => {
     email: '',
     dateOfJoining: '',
   })
+  const [employeeList, setEmployeeList] = useState([]) // To hold the list of employees
+
+  const apiBaseUrl = 'http://localhost:1000/api/employee-records'
+
+  // Fetch token from localStorage (assuming it's stored as "token")
+  const token = localStorage.getItem('token')
+
+  // Fetch employee records from the API on component mount
+  useEffect(() => {
+    const fetchEmployeeRecords = async () => {
+      try {
+        const response = await fetch(apiBaseUrl, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch employee records')
+        }
+
+        const data = await response.json()
+        setEmployeeList(data.reverse())
+      } catch (error) {
+        console.error('Error fetching employee records:', error)
+      }
+    }
+
+    fetchEmployeeRecords()
+  }, [apiBaseUrl, token])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setEmployeeDetails((prev) => ({ ...prev, [name]: value }))
   }
 
-  const submitEmployeeDetails = () => {
-    console.log('Employee Details Submitted:', employeeDetails)
-    alert('Employee record saved successfully!')
+  const submitEmployeeDetails = async () => {
+    try {
+      const response = await fetch(apiBaseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(employeeDetails),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setEmployeeList((prev) => [...prev, result.newRecord]) // Add new employee to the list
+        setEmployeeDetails({
+          name: '',
+          employeeId: '',
+          designation: '',
+          department: '',
+          contactNumber: '',
+          email: '',
+          dateOfJoining: '',
+        }) // Clear the form after submission
+      } else {
+        throw new Error(result.message || 'Error saving employee record.')
+      }
+    } catch (error) {
+      console.error('Error submitting employee details:', error)
+      alert('Error saving employee record.')
+    }
   }
 
   return (
@@ -146,6 +217,41 @@ const EmployeeRecords = () => {
                 </CCol>
               </CRow>
             </CForm>
+
+            {/* Display Employee Records in Table */}
+            <div className="mt-5">
+              <h5>Employee Records</h5>
+              {employeeList.length > 0 ? (
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Employee ID</th>
+                      <th>Name</th>
+                      <th>Designation</th>
+                      <th>Department</th>
+                      <th>Contact Number</th>
+                      <th>Email</th>
+                      <th>Date of Joining</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {employeeList.map((employee, index) => (
+                      <tr key={index}>
+                        <td>{employee.employeeId}</td>
+                        <td>{employee.name}</td>
+                        <td>{employee.designation}</td>
+                        <td>{employee.department}</td>
+                        <td>{employee.contactNumber}</td>
+                        <td>{employee.email}</td>
+                        <td>{employee.dateOfJoining}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No employee records available</p>
+              )}
+            </div>
           </CCardBody>
         </CCard>
       </CCol>
