@@ -46,7 +46,7 @@ const Dropdowns = React.lazy(() => import('./views/buttons/dropdowns/Dropdowns')
 
 //Forms
 const Employeerecords = React.lazy(() => import('./views/forms/employeerecords/Employeerecords'))
-const Shiftmanagement = React.lazy(() => import('./views/forms/shiftmanagement/ShiftManagement'))
+const Shiftmanagement = React.lazy(() => import('./views/forms/shiftmanagement'))
 const Payrollleavemanagement = React.lazy(
   () => import('./views/forms/payrollleavemanagement/Payrollleavemanagement'),
 )
