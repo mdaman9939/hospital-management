@@ -16,9 +16,19 @@ const authenticateToken = require("./routes/AuthenticateToken");
 const app = express();
 
 connectDb();
+
+//cors
+app.use(
+  cors({
+    origin: ["https://hospital-management-4kqv.vercel.app/#/login", "*"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 // Middleware to parse JSON bodies
 app.use(express.json()); // Required if your API handles JSON
 app.use(bodyParser.json());
+
 app.use("/api", PatientRegistrationAdmissionRoutes);
 app.use("/api", AppointmentSchedulingRoutes);
 app.use("/api", DischargesummarymanagementRoutes);
@@ -36,14 +46,6 @@ app.get("/dashboard", authenticateToken, (req, res) => {
 app.get("/", (req, res) => {
   res.send("hello, world!");
 });
-
-app.use(
-  cors({
-    origin: ["https://hospital-management-4kqv.vercel.app/#/login", "*"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
 const PORT = process.env.PORT || 1000;
 
