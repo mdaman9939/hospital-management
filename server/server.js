@@ -15,7 +15,9 @@ const RegisterRoutes = require("./routes/Register");
 const authenticateToken = require("./routes/AuthenticateToken");
 const app = express();
 
-connectDb();
+// connectDb();
+// Connect to database only when a request comes in
+connectDb().then(() => console.log("Connected to MongoDB"));
 
 //cors
 app.use(
