@@ -8,7 +8,7 @@ const AppointmentSchedulingRoutes = require("./routes/AppointmentScheduling");
 const DischargesummarymanagementRoutes = require("./routes/DischargeSummaryManagement");
 const DoctorProfilesSpecializationsRoutes = require("./routes/DoctorProfilesSpecializations");
 const DutyRostersSchedulesRoutes = require("./routes/DutyRostersSchedules");
-const EmployeeRecordsRoutes = require("./routes/EmployeeRecords ");
+const EmployeeRecordsRoutes = require("./routes/em");
 const ShiftManagementRoutes = require("./routes/ShiftManagement");
 const PayrollLeaveManagementRoutes = require("./routes/PayrollLeaveManagement");
 const RegisterRoutes = require("./routes/Register");
@@ -22,7 +22,7 @@ connectDb().then(() => console.log("Connected to MongoDB"));
 //cors
 app.use(
   cors({
-    origin: ["https://hospital-management-4kqv.vercel.app/#/login", "*"],
+    origin: ["https://hospital-management-4kqv.vercel.app", "*"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
