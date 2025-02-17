@@ -22,7 +22,7 @@ connectDb().then(() => console.log("Connected to MongoDB"));
 //cors
 app.use(
   cors({
-    origin: ["https://hospital-management-4kqv.vercel.app", "*"],
+    origin: ["https://hospital-management-peach-sigma.vercel.app", "*"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
