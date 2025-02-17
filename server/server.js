@@ -27,6 +27,7 @@ app.use(
     credentials: true,
   })
 );
+
 // Middleware to parse JSON bodies
 app.use(express.json()); // Required if your API handles JSON
 app.use(bodyParser.json());
