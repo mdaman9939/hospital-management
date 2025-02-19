@@ -62,7 +62,7 @@ const DischargeSummaryManagement = () => {
     const fetchPatients = async () => {
       const token = localStorage.getItem('token') // Use actual token from localStorage
       try {
-        const response = await fetch('http://localhost:1000/api/patient', {
+        const response = await fetch('${process.env.REACT_APP_API_URL}/api/patient', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,7 +111,7 @@ const DischargeSummaryManagement = () => {
   const handleSaveSummary = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch('http://localhost:1000/api/summary', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/summary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const DischargeSummaryManagement = () => {
 
   const fetchDischargeSummaries = async () => {
     try {
-      const response = await fetch(`http://localhost:1000/api/summary`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/summary`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,

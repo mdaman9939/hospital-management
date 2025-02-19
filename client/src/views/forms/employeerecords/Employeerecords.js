@@ -36,7 +36,7 @@ const EmployeeRecords = () => {
   })
   const [employeeList, setEmployeeList] = useState([]) // To hold the list of employees
 
-  const apiBaseUrl = 'http://localhost:1000/api/employee-records'
+  const apiBaseUrl = '${process.env.REACT_APP_API_URL}/api/employee-records'
 
   // Fetch token from localStorage (assuming it's stored as "token")
   const token = localStorage.getItem('token')

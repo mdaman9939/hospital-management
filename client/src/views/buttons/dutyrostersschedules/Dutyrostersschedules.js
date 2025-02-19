@@ -50,7 +50,7 @@ const DutyRostersSchedules = () => {
     try {
       const token = localStorage.getItem('token') // Assuming token is stored in localStorage
 
-      const response = await fetch('http://localhost:1000/api/duty-roster', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/duty-roster', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -89,7 +89,7 @@ const DutyRostersSchedules = () => {
     try {
       const token = localStorage.getItem('token') // Assuming token is stored in localStorage
 
-      const response = await fetch('http://localhost:1000/api/duty-roster', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/duty-roster', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

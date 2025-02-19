@@ -53,7 +53,7 @@ const PayrollLeaveManagement = () => {
   useEffect(() => {
     const token = localStorage.getItem('token')
 
-    fetch('http://localhost:1000/api/payroll-leave', {
+    fetch('${process.env.REACT_APP_API_URL}/api/payroll-leave', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ const PayrollLeaveManagement = () => {
     const token = localStorage.getItem('token')
 
     try {
-      const response = await fetch('http://localhost:1000/api/payroll-leave', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/payroll-leave', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

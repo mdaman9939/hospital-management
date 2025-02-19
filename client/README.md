@@ -82,18 +82,18 @@ $ yarn install
 ### Basic usage
 
 ``` bash
-# dev server with hot reload at http://localhost:3000
+# dev server with hot reload at ${process.env.REACT_APP_API_URL}
 $ npm start 
 ```
 
 or 
 
 ``` bash
-# dev server with hot reload at http://localhost:3000
+# dev server with hot reload at ${process.env.REACT_APP_API_URL}
 $ yarn start
 ```
 
-Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
+Navigate to [${process.env.REACT_APP_API_URL}](${process.env.REACT_APP_API_URL}). The app will automatically reload if you change any of the source files.
 
 #### Build
 
