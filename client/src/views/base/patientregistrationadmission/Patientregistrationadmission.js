@@ -75,7 +75,7 @@ const PatientRegistrationAdmission = () => {
         return
       }
 
-      const response = await fetch('https://amankaserver.vercel.app/api/patient', {
+      const response = await fetch('${REACT_APP_API_URL}/api/patient', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`, // Include token in Authorization header
