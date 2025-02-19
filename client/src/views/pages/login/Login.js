@@ -27,8 +27,9 @@ const Login = () => {
     setError('') // Clear any previous errors
 
     try {
-      const response = await fetch('http://localhost:1000/api/login', {
+      const response = await fetch('https://amankaserver.vercel.app/api/login', {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
