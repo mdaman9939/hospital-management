@@ -65,6 +65,8 @@ const PatientRegistrationAdmission = () => {
       [id]: value,
     }))
   }
+  console.log(process.env.REACT_APP_API_URL)
+
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token') // Get token from localStorage
@@ -75,7 +77,7 @@ const PatientRegistrationAdmission = () => {
         return
       }
 
-      const response = await fetch('${REACT_APP_API_URL}/api/patient', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/patient', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`, // Include token in Authorization header
