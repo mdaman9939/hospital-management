@@ -19,10 +19,14 @@ const app = express();
 // Connect to database only when a request comes in
 connectDb().then(() => console.log("Connected to MongoDB"));
 
-//cors
+// app.use(cors());
+// //cors
 app.use(
   cors({
-    origin: ["https://hospital-management-peach-sigma.vercel.app", "*"],
+    origin: [
+      "https://hospital-management-peach-sigma-git-main-md-amans-projects.vercel.app/",
+      "*",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -46,10 +50,10 @@ app.get("/dashboard", authenticateToken, (req, res) => {
   res.json({ message: "Welcome to the dashboard!" });
 });
 
-app.get("/", (req, res) => {
-  res.send("hello, world!");
-});
 
+app.get("/", (req, res) => {
+  res.json({ message: "server is working fine" });
+});
 const PORT = process.env.PORT || 1000;
 
 app.listen(PORT, () => {

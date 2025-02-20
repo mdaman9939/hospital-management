@@ -22,12 +22,14 @@ const Login = () => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
+  console.error('API URL:', process.env.REACT_APP_API_URL)
+
   const handleLogin = async (e) => {
     e.preventDefault()
     setError('') // Clear any previous errors
 
     try {
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/login', {
+      const response = await fetch(`https://amankaserver.vercel.app/api/login`, {
         method: 'POST',
         mode: 'cors',
         headers: {
