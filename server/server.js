@@ -25,7 +25,6 @@ app.use(
   cors({
     origin: [
       "https://hospital-management-peach-sigma-git-main-md-amans-projects.vercel.app/",
-      "*",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
